@@ -1,20 +1,30 @@
-version: "3.8"
+networks:
+  dev:
 
 services:
-  frontend:
-    build: ./frontend
-    container_name: tron_frontend
+  nginx:
+    image: nginx:stable-alpine
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+      - './nginx.conf:/etc/nginx/nginx.conf'
+      - '/etc/letsencrypt:/etc/letsencrypt'
     depends_on:
       - backend
+      - frontend
+    networks:
+      - dev
+    
 
   backend:
-    build: ./backend
-    conteiner_name: tron_backend
-    ports:
-      - "8000:8000"
-    enviroment:
-      - NODE_ENV=production
-    volumes:
-      - ./backend:/app 
+    build:
+      context: ./backend
+    networks:
+      - dev
+
+  frontend:
+    build:
+      context: ./frontend
+    networks:
+      - dev
