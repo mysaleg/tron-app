@@ -1,13 +1,6 @@
-FROM node:alpine as build
-
-COPY package.json package.json
-RUN npm install
+FROM node:20-alpine
+WORKDIR /app
 COPY . .
-node server.js
-
-FROM nginx:stable-alpine
-
-COPY --from=build /dist /usr/share/nginx/html
-COPY --from=build nginx.conf /etc/nginx/conf.d/default.conf
+RUN npm install
 EXPOSE 8000
-CMD [ "nginx", "-g", "daemon off;" ]
+CMD [ "node", "server.js" ]
