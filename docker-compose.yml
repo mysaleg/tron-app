@@ -13,7 +13,7 @@ services:
     expose:
       - "8000"
     networks:
-      - deweb
+      - web
   nginx:
     image: nginx:alpine
     container_name: tron_nginx
