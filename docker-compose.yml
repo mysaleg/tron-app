@@ -22,4 +22,30 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/ssl.conf:/etc/nginx/conf.d/default.conf:ro
-      
+      - ./cerbot/www:var/www/cerbot
+      - ./cerbot/conf:/etc/letsencrypt
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - web
+
+  
+  certbot:
+    image: certbot/certbot
+    container_name: tron_certbot
+    volumes:
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    entrypoint: ""
+    command: >
+      sh -c "certbot certonly --webroot --webroot-path=/var/www/certbot
+      -- email $EMAIL --agree-tos --no-eff-email
+      -d $DOMAIN"
+
+networks:
+  web:
+    driver: bridge
