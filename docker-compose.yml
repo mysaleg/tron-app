@@ -1,39 +1,25 @@
-version: '3.8'
-
-networks:
-  dev:
-    driver: bridge
+version: "3.8"
 
 services:
-  nginx:
-    image: nginx:stable-alpine
-    container_name: tron-nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - './nginx.conf:/etc/nginx/nginx.conf'
-      - '/etc/letsencrypt:/etc/letsencrypt'
-    depends_on:
-      - backend
-      - frontend
+  frontend:
+    build: ./frontend
+    container_name: tron-frontend
+    expose:
+      - "3000"
     networks:
-      - dev
-    restart: unless-stopped
+      - web
 
   backend:
-    build:
-      context: ./backend
+    build: ./backend
     container_name: tron-backend
+    expose:
+      - "8000"
     networks:
-      - dev
-    restart: unless-stopped
-
-  frontend:
-    build:
-      context: ./frontend
-    container_name: tron-frontend
-    networks:
-      - dev
-    restart: unless-stopped
-    
+      - deweb
+  nginx:
+    image: nginx:alpine
+    container_name: tron_nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl.conf:/etc/nginx/conf.d/default.conf:ro
+      
