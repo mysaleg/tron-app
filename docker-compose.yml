@@ -20,8 +20,8 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/ssl.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./cerbot/www:var/www/cerbot
-      - ./cerbot/conf:/etc/letsencrypt
+      - ./certbot/www:var/www/cerbot
+      - ./certbot/conf:/etc/letsencrypt
     ports:
       - "80:80"
       - "443:443"
