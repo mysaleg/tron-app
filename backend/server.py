@@ -209,7 +209,7 @@ async def wait_for_transaction_confirmation(txid: str, max_attempts: int = 15) -
     
     raise HTTPException(status_code=500, detail="Время подтверждения транзакции истекло")
 
-# Запуск сервера 2
+# Запуск сервера 3
 if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", 8000))
